@@ -15,7 +15,7 @@ def main():
         print(f"Generation count: {generation_count}")
         grid = next_generation(grid)
         generation_count += 1
-        time.sleep(1)
+        time.sleep(0.1)
 
 
 def random_row():
@@ -33,7 +33,7 @@ def next_generation(grid):
 def update_cell(grid, i, j):
     neighbors = count_neighbors(grid, i, j)
 
-    if grid[i][j] == 1:
+    if grid[i][j]:
         if neighbors < 2 or neighbors > 3:
             return 0
     else:
@@ -43,14 +43,10 @@ def update_cell(grid, i, j):
 
 
 def count_neighbors(grid, row, col):
-    count = 0
-    row_count = len(grid)
-    for i in range(max(0, row - 1), min(row_count - 1, row + 2)):
-        col_count = len(grid[i])
-        for j in range(max(0, col - 1), min(col_count - 1, col + 2)):
-            if (i, j) != (row, col) and grid[i][j] == 1:
-                count += 1
-    return count
+    return sum(
+        sum(row[col-1:col+2])
+        for row in grid[row-1:row+2]
+    ) - grid[row][col]
 
 
 if __name__ == "__main__":
